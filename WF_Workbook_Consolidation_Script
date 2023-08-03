@@ -9,7 +9,7 @@ import os
 # 1. NEED THE PATH OF THE FOLDER
 
 
-# the path of the folder
+# is the path of the folder
 folder_path = "C:\\Users\\BTruong\\OneDrive - TRC\\Documents\\Master File Python\\00000000_template"
 
 
