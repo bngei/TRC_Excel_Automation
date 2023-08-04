@@ -1,3 +1,4 @@
+# --------------------------------------------------------------------------------------------------
 # THIS FILE COLLECTS DATA FROM THE EXCEL FILES THEN INSERTS THE INFORMATION INTO A SINGLE EXCEL FILE
 from openpyxl import load_workbook, Workbook
 from datetime import datetime, date
@@ -9,12 +10,23 @@ import os
 # 1. NEED THE PATH OF THE FOLDER
 
 
-# is the path of the folder
+# -------------------------------------------------------------------------------------------------
+# this is the path of the folder: must be updated to the folder with the Excel files
 folder_path = "C:\\Users\\BTruong\\OneDrive - TRC\\Documents\\Master File Python\\00000000_template"
+# --------------------------------------------------------------------------------------------------
 
 
-# a function that returns a list of the excel file paths
 def return_list_of_paths(folder_path):
+    """
+    Purpose:
+        Returns a list of paths to all Excel files within the folder and its subfolders.
+
+    Parameters:
+        folder_path (str): The path of the folder that where searching for Excel files will start.
+
+    Returns:
+        list: A list of file paths to all the Excel files found within the folder and its subfolders.
+    """
     path_list = []
     return_path_list = []
     folder = os.listdir(folder_path)
@@ -43,11 +55,24 @@ def return_list_of_paths(folder_path):
     return return_path_list
 
 
-# a function that creates an excel file
-def create_excel_file(path):
+def create_excel_file(path:str):
+    """
+        Purpose:
+            Creates a new Excel file with a predefined header structure.
+
+        Parameters:
+            path (str): This is the file path where the Excel file will be created.
+
+        Returns:
+            None: This function does not return anything, but it creates the Excel file at the specified 'path'.
+
+        Example:
+            create_excel_file('C:/Users/username/Documents/my_excel_file.xlsx')
+    """
     workbook = Workbook()
     worksheet = workbook['Sheet']
 
+    # naming the header columns
     worksheet['A1'] = 'Asset ID'
     worksheet['B1'] = 'Tab Name'
     worksheet['C1'] = 'Table Name'
@@ -148,7 +173,6 @@ def create_excel_file(path):
     worksheet['DK1'] = 'Label'
     worksheet['DL1'] = 'Counter'
 
-
     worksheet['EA1'] = 'Asset ID'
     worksheet['EB1'] = 'Tab Name'
     worksheet['EC1'] = 'Table Name'
@@ -227,12 +251,17 @@ def create_excel_file(path):
     worksheet['GM2'] = '2'
     worksheet['GN2'] = '1'
 
-
     workbook.save(path)
 
 
-# a function that will extract information from the excel file into the consolidated file and 
 def enclosure_extraction(path):
+    """
+        Purpose:
+
+        Parameters:
+
+        Returns:
+    """
     excel_file_wb = load_workbook(path)
     general_ws = excel_file_wb['0.General']
     enclosure_ws = excel_file_wb['1.Enclosure']
@@ -349,6 +378,13 @@ def enclosure_extraction(path):
 
 
 def power_extraction(path):
+    """
+        Purpose:
+
+        Parameters:
+
+        Returns:
+    """
     excel_file_wb = load_workbook(path)
     general_ws = excel_file_wb['0.General']
     power_ws = excel_file_wb['2.Power']
@@ -495,6 +531,13 @@ def power_extraction(path):
 
 
 def instrumentation_extraction(path):
+    """
+        Purpose:
+
+        Parameters:
+
+        Returns:
+    """
     excel_file_wb = load_workbook(path)
     general_ws = excel_file_wb['0.General']
     instrumentation_ws = excel_file_wb['3.Instrumentation']
@@ -578,6 +621,13 @@ def instrumentation_extraction(path):
 
 
 def plc_extraction(path):
+    """
+        Purpose:
+
+        Parameters:
+
+        Returns:
+    """
     excel_file_wb = load_workbook(path)
     general_ws = excel_file_wb['0.General']
     plc_ws = excel_file_wb['4.PLC.RTU']
@@ -779,6 +829,13 @@ def plc_extraction(path):
 
 
 def comms_extraction(path):
+    """
+        Purpose:
+
+        Parameters:
+
+        Returns:
+    """
     excel_file_wb = load_workbook(path)
     general_ws = excel_file_wb['0.General']
     comms_ws = excel_file_wb['5.Comms']
@@ -925,6 +982,13 @@ def comms_extraction(path):
 
 
 def last_date_modified(path):
+    """
+        Purpose:
+
+        Parameters:
+
+        Returns:
+    """
     excel_file_wb = load_workbook(path)
     general_ws = excel_file_wb['0.General']
 
@@ -1031,6 +1095,13 @@ def last_date_modified(path):
 
 # a funciton that recieves the current time and date
 def recieve_date_and_time():
+    """
+        Purpose: 
+
+        Parameters:
+
+        Returns:
+    """
     current_date = date.today()
 
     # Get the current time in the military format
@@ -1039,8 +1110,14 @@ def recieve_date_and_time():
     return(str(current_date) + '_' + current_time + '_')
 
 
-# a function the creates a duplicate excel file
 def create_duplicate_file(source_file_path, destination_file_path):
+    """
+        Purpose:
+
+        Parameters:
+
+        Returns:
+    """
     try:
         shutil.copyfile(source_file_path, destination_file_path)
     except FileNotFoundError:
@@ -1049,8 +1126,14 @@ def create_duplicate_file(source_file_path, destination_file_path):
         print(f"An error occurred: {e}")
 
 
-# the main function that completes the task
 def main_function(path_list):
+    """
+        Purpose:
+
+        Parameters:
+
+        Returns:
+    """
     # create a new excel file for the consolidated data
     if not os.path.exists("Wireframe_Consolidated_Data.xlsx"):
         create_excel_file("Wireframe_Consolidated_Data.xlsx")
