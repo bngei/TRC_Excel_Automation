@@ -254,16 +254,39 @@ def create_excel_file(path:str):
     workbook.save(path)
 
 
-def enclosure_extraction(path):
+def retrieve_asset_ID(path):
     """
         Purpose:
-
+            Retrieves the asset ID from the specified Excel file
+            
         Parameters:
+            path (str): The path of the Excel file to retrieve the asset ID
 
         Returns:
+            int: The asset ID extracted from the Excel file. Returns 0 if the asset ID is null.
     """
     excel_file_wb = load_workbook(path)
     general_ws = excel_file_wb['0.General']
+    
+    asset_ID = general_ws['C4'].value
+    if asset_ID is None:
+        asset_ID = 0
+
+    return asset_ID
+    
+
+def enclosure_extraction(path):
+    """
+        Purpose: 
+            Extracts data from an Excel file in the Enclosure sheet and writes it to a consolidated Excel file.
+
+        Parameters: 
+            path (str): This is the file path of the Excel file.
+
+        Returns:
+            None: This function does not return anything, but it writes to the consolidated Excel file. 
+    """
+    excel_file_wb = load_workbook(path)
     enclosure_ws = excel_file_wb['1.Enclosure']
 
     consolidated_wb = load_workbook('Wireframe_Consolidated_Data.xlsx')
@@ -271,19 +294,17 @@ def enclosure_extraction(path):
 
 
     # get total number of parent rows in 1.Enclosure
-    total_rows = 0
-    pos = 8
-    start_cell = enclosure_ws['B8'].value
-    while start_cell is not None and str(start_cell).isdigit():
-        total_rows += 1
-        pos += 1
-        start_cell = enclosure_ws[f"B{pos}"].value
+    total_parent_rows = 0
+    row = 8
+    cell = enclosure_ws['B8'].value
+    while cell is not None and str(cell).isdigit():
+        total_parent_rows += 1
+        row += 1
+        cell = enclosure_ws[f"B{row}"].value
 
 
     # get asset ID
-    asset_ID = general_ws['C4'].value
-    if asset_ID is None:
-        asset_ID = 0
+    asset_ID = retrieve_asset_ID(path)
 
 
     # recieving counter
@@ -298,15 +319,14 @@ def enclosure_extraction(path):
             start_of_table_list.append(row)
 
     
-    # filling in information from first table
+    # filling in information from parent table
     row = consolidated_ws['GD2'].value
     row = int(row)
     total_new_rows = 0
     start_row = start_of_table_list[0]
-    for row_num in range(start_row, start_row + total_rows):
+    for row_num in range(start_row, start_row + total_parent_rows):
         row_list = []
         for column_letter in range(66, 85): 
-            # get first row from first table
             cell = enclosure_ws[chr(column_letter) + str(row_num)].value
             row_list.append(cell)
 
@@ -332,7 +352,7 @@ def enclosure_extraction(path):
     row = consolidated_ws['GD2'].value
     row = int(row)
     start_row = start_of_table_list[1]
-    for row_num in range(start_row, start_row + total_rows):
+    for row_num in range(start_row, start_row + total_parent_rows):
         row_list = []
         for column_letter in range(66, 81): 
             # get first row from first table
@@ -353,9 +373,8 @@ def enclosure_extraction(path):
 
 
     # update data validation
-    row = consolidated_ws['GD2'].value
-    row = int(row)
-    for row_num in range(row, total_rows + row):
+    row = int(consolidated_ws['GD2'].value)
+    for row_num in range(row, total_parent_rows + row):
         row_list = []
         for column_letter in range(71, 87):
             cell = consolidated_ws[chr(column_letter) + str(row_num)].value
@@ -386,7 +405,6 @@ def power_extraction(path):
         Returns:
     """
     excel_file_wb = load_workbook(path)
-    general_ws = excel_file_wb['0.General']
     power_ws = excel_file_wb['2.Power']
 
     consolidated_wb = load_workbook('Wireframe_Consolidated_Data.xlsx')
@@ -394,9 +412,7 @@ def power_extraction(path):
 
 
     # get asset ID
-    asset_ID = general_ws['C4'].value
-    if asset_ID is None:
-        asset_ID = 0
+    asset_ID = retrieve_asset_ID(path)
 
     
     # recieving counter
@@ -450,8 +466,7 @@ def power_extraction(path):
 
 
     # filling in information for comms table
-    row = consolidated_ws['GF2'].value
-    row = int(row)
+    row = int(consolidated_ws['GF2'].value)
     parent_row = 1
     child_row = 1
     total_new_child_rows = 0
@@ -539,7 +554,6 @@ def instrumentation_extraction(path):
         Returns:
     """
     excel_file_wb = load_workbook(path)
-    general_ws = excel_file_wb['0.General']
     instrumentation_ws = excel_file_wb['3.Instrumentation']
 
     consolidated_wb = load_workbook('Wireframe_Consolidated_Data.xlsx')
@@ -551,9 +565,7 @@ def instrumentation_extraction(path):
 
 
     # get asset ID
-    asset_ID = general_ws['C4'].value
-    if asset_ID is None:
-        asset_ID = 0
+    asset_ID = retrieve_asset_ID(path)
 
 
     # recieving counter
@@ -629,7 +641,6 @@ def plc_extraction(path):
         Returns:
     """
     excel_file_wb = load_workbook(path)
-    general_ws = excel_file_wb['0.General']
     plc_ws = excel_file_wb['4.PLC.RTU']
 
     consolidated_wb = load_workbook('Wireframe_Consolidated_Data.xlsx')
@@ -637,9 +648,8 @@ def plc_extraction(path):
 
 
     # get asset ID
-    asset_ID = general_ws['C4'].value
-    if asset_ID is None:
-        asset_ID = 0
+    asset_ID = retrieve_asset_ID(path)
+
 
     
     # recieving counter
@@ -837,7 +847,6 @@ def comms_extraction(path):
         Returns:
     """
     excel_file_wb = load_workbook(path)
-    general_ws = excel_file_wb['0.General']
     comms_ws = excel_file_wb['5.Comms']
 
     consolidated_wb = load_workbook('Wireframe_Consolidated_Data.xlsx')
@@ -845,9 +854,7 @@ def comms_extraction(path):
 
 
     # get asset ID
-    asset_ID = general_ws['C4'].value
-    if asset_ID is None:
-        asset_ID = 0
+    asset_ID = retrieve_asset_ID(path)
 
     
     # recieving counter
@@ -998,9 +1005,7 @@ def last_date_modified(path):
 
 
     # asset ID
-    asset_ID = general_ws['C4'].value
-    if asset_ID is None:
-        asset_ID = 0
+    asset_ID = retrieve_asset_ID(path)
 
 
     # file name
@@ -1097,10 +1102,13 @@ def last_date_modified(path):
 def recieve_date_and_time():
     """
         Purpose: 
+            Recieve the current date and time in military format.
 
-        Parameters:
+        Parameters: 
+            None.
 
         Returns:
+            str: A string representing the current date and time in a specific format.
     """
     current_date = date.today()
 
@@ -1113,17 +1121,21 @@ def recieve_date_and_time():
 def create_duplicate_file(source_file_path, destination_file_path):
     """
         Purpose:
+            Creates a duplicate of the Excel file from the source path to the destination path.
 
         Parameters:
+            source_file_path (str): The path of the consolidated Excel file that will be duplicated.
+            destination_file_path (str): The path of the duplicate file that will be created.
 
         Returns:
+            None.
     """
     try:
         shutil.copyfile(source_file_path, destination_file_path)
     except FileNotFoundError:
         print(f"Source fild not found: {source_file_path}")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    except Exception as error:
+        print(f"An error occurred: {error}")
 
 
 def main_function(path_list):
