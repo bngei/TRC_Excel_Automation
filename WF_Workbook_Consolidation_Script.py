@@ -1,5 +1,6 @@
 # --------------------------------------------------------------------------------------------------
 # THIS FILE COLLECTS DATA FROM THE EXCEL FILES THEN INSERTS THE INFORMATION INTO A SINGLE EXCEL FILE
+# --------------------------------------------------------------------------------------------------
 from openpyxl import load_workbook, Workbook
 from datetime import datetime, date
 import shutil
@@ -273,6 +274,117 @@ def retrieve_asset_ID(path):
         asset_ID = 0
 
     return asset_ID
+
+
+def general_modification(path):
+    """
+        Purpose: 
+            Extracts data from an Excel file in the Enclosure sheet and writes it to a consolidated Excel file.
+
+        Parameters: 
+            path (str): This is the file path of the Excel file.
+
+        Returns:
+            None: This function does not return anything, but it writes to the consolidated Excel file. 
+    """
+    excel_file_wb = load_workbook(path)
+    general_ws = excel_file_wb['0.General']
+
+    consolidated_wb = load_workbook('Wireframe_Consolidated_Data.xlsx')
+    consolidated_ws = consolidated_wb['Sheet']
+
+
+    # asset ID
+    asset_ID = retrieve_asset_ID(path)
+
+
+    # file name
+    file_name = os.path.basename(path)
+    file_name = file_name[:-5]
+
+
+    # row
+    row = int(consolidated_ws['GM2'].value)
+
+
+    # last date modified
+    modification_time = os.path.getmtime(path)
+    last_modified_date = datetime.fromtimestamp(modification_time)
+
+
+    # recieving counter
+    counter = consolidated_ws['GN2'].value
+
+
+    # checking version
+    version = 0
+    if general_ws['I3'].value == 'Inlet CV':
+        version = 1
+    else:
+        version = 2
+
+
+    # inserting data
+    if version == 1:
+        consolidated_ws[f"FB{row}"].value = asset_ID
+        consolidated_ws[f"FC{row}"].value = counter
+        consolidated_ws[f"FD{row}"].value = file_name
+        consolidated_ws[f"FE{row}"].value = last_modified_date
+        consolidated_ws[f"FF{row}"].value = general_ws['B4'].value
+        consolidated_ws[f"FG{row}"].value = general_ws['B5'].value
+        consolidated_ws[f"FH{row}"].value = general_ws['D4'].value
+        consolidated_ws[f"FI{row}"].value = general_ws['D5'].value
+        consolidated_ws[f"FJ{row}"].value = general_ws['E4'].value
+        consolidated_ws[f"FK{row}"].value = general_ws['E5'].value
+        consolidated_ws[f"FL{row}"].value = general_ws['F4'].value
+        consolidated_ws[f"FM{row}"].value = general_ws['F5'].value
+        consolidated_ws[f"FN{row}"].value = general_ws['G4'].value
+        consolidated_ws[f"FO{row}"].value = general_ws['G5'].value
+        consolidated_ws[f"FP{row}"].value = general_ws['H4'].value
+        consolidated_ws[f"FQ{row}"].value = general_ws['H5'].value
+        consolidated_ws[f"FV{row}"].value = general_ws['I4'].value
+        consolidated_ws[f"FW{row}"].value = general_ws['I5'].value
+        consolidated_ws[f"FX{row}"].value = general_ws['J4'].value
+        consolidated_ws[f"FY{row}"].value = general_ws['J5'].value
+        consolidated_ws[f"FZ{row}"].value = general_ws['K4'].value
+        consolidated_ws[f"GA{row}"].value = general_ws['K5'].value
+        consolidated_ws[f"GB{row}"].value = version
+    if version == 2:
+        consolidated_ws[f"FB{row}"].value = asset_ID
+        consolidated_ws[f"FC{row}"].value = counter
+        consolidated_ws[f"FD{row}"].value = file_name
+        consolidated_ws[f"FE{row}"].value = last_modified_date
+        consolidated_ws[f"FF{row}"].value = general_ws['B4'].value
+        consolidated_ws[f"FG{row}"].value = general_ws['B5'].value
+        consolidated_ws[f"FH{row}"].value = general_ws['D4'].value
+        consolidated_ws[f"FI{row}"].value = general_ws['D5'].value
+        consolidated_ws[f"FJ{row}"].value = general_ws['E4'].value
+        consolidated_ws[f"FK{row}"].value = general_ws['E5'].value
+        consolidated_ws[f"FL{row}"].value = general_ws['F4'].value
+        consolidated_ws[f"FM{row}"].value = general_ws['F5'].value
+        consolidated_ws[f"FN{row}"].value = general_ws['G4'].value
+        consolidated_ws[f"FO{row}"].value = general_ws['G5'].value
+        consolidated_ws[f"FP{row}"].value = general_ws['H4'].value
+        consolidated_ws[f"FQ{row}"].value = general_ws['H5'].value
+
+        consolidated_ws[f"FR{row}"].value = general_ws['I4'].value
+        consolidated_ws[f"FS{row}"].value = general_ws['I5'].value
+        consolidated_ws[f"FT{row}"].value = general_ws['J4'].value
+        consolidated_ws[f"FU{row}"].value = general_ws['J5'].value
+
+        consolidated_ws[f"FV{row}"].value = general_ws['K4'].value
+        consolidated_ws[f"FW{row}"].value = general_ws['K5'].value
+        consolidated_ws[f"FX{row}"].value = general_ws['L4'].value
+        consolidated_ws[f"FY{row}"].value = general_ws['L5'].value
+        consolidated_ws[f"FZ{row}"].value = general_ws['M4'].value
+        consolidated_ws[f"GA{row}"].value = general_ws['M5'].value
+        consolidated_ws[f"GB{row}"].value = version
+    
+    
+    consolidated_ws['GM2'].value = int(consolidated_ws['GM2'].value) + 1
+    consolidated_ws['GN2'].value = int(consolidated_ws['GN2'].value) + 1
+    consolidated_wb.save('Wireframe_Consolidated_Data.xlsx')
+    return
     
 
 def enclosure_extraction(path):
@@ -399,10 +511,13 @@ def enclosure_extraction(path):
 def power_extraction(path):
     """
         Purpose:
+            Extracts data from an Excel file in the Power sheet and writes it to a consolidated Excel file.
 
-        Parameters:
+       Parameters: 
+            path (str): This is the file path of the Excel file.
 
         Returns:
+            None: This function does not return anything, but it writes to the consolidated Excel file. 
     """
     excel_file_wb = load_workbook(path)
     power_ws = excel_file_wb['2.Power']
@@ -548,10 +663,13 @@ def power_extraction(path):
 def instrumentation_extraction(path):
     """
         Purpose:
+            Extracts data from an Excel file in the Instrumentation sheet and writes it to a consolidated Excel file.
 
-        Parameters:
+        Parameters: 
+            path (str): This is the file path of the Excel file.
 
         Returns:
+            None: This function does not return anything, but it writes to the consolidated Excel file. 
     """
     excel_file_wb = load_workbook(path)
     instrumentation_ws = excel_file_wb['3.Instrumentation']
@@ -635,10 +753,13 @@ def instrumentation_extraction(path):
 def plc_extraction(path):
     """
         Purpose:
+            Extracts data from an Excel file in the PLC sheet and writes it to a consolidated Excel file.
 
-        Parameters:
+        Parameters: 
+            path (str): This is the file path of the Excel file.
 
         Returns:
+            None: This function does not return anything, but it writes to the consolidated Excel file. 
     """
     excel_file_wb = load_workbook(path)
     plc_ws = excel_file_wb['4.PLC.RTU']
@@ -841,10 +962,13 @@ def plc_extraction(path):
 def comms_extraction(path):
     """
         Purpose:
+            Extracts data from an Excel file in the Comms sheet and writes it to a consolidated Excel file.
 
-        Parameters:
+        Parameters: 
+            path (str): This is the file path of the Excel file.
 
         Returns:
+            None: This function does not return anything, but it writes to the consolidated Excel file. 
     """
     excel_file_wb = load_workbook(path)
     comms_ws = excel_file_wb['5.Comms']
@@ -988,116 +1112,6 @@ def comms_extraction(path):
     return 
 
 
-def last_date_modified(path):
-    """
-        Purpose:
-
-        Parameters:
-
-        Returns:
-    """
-    excel_file_wb = load_workbook(path)
-    general_ws = excel_file_wb['0.General']
-
-
-    consolidated_wb = load_workbook('Wireframe_Consolidated_Data.xlsx')
-    consolidated_ws = consolidated_wb['Sheet']
-
-
-    # asset ID
-    asset_ID = retrieve_asset_ID(path)
-
-
-    # file name
-    file_name = os.path.basename(path)
-    file_name = file_name[:-5]
-
-
-    # row
-    row = int(consolidated_ws['GM2'].value)
-
-
-    # last date modified
-    modification_time = os.path.getmtime(path)
-    # Convert the modification time to a human-readable date format
-    last_modified_date = datetime.fromtimestamp(modification_time)
-
-
-    # recieving counter
-    counter = consolidated_ws['GN2'].value
-
-
-    # checking version
-    version = 0
-    if general_ws['I3'].value == 'Inlet CV':
-        version = 1
-    else:
-        version = 2
-
-
-    # inserting data
-    if version == 1:
-        consolidated_ws[f"FB{row}"].value = asset_ID
-        consolidated_ws[f"FC{row}"].value = counter
-        consolidated_ws[f"FD{row}"].value = file_name
-        consolidated_ws[f"FE{row}"].value = last_modified_date
-        consolidated_ws[f"FF{row}"].value = general_ws['B4'].value
-        consolidated_ws[f"FG{row}"].value = general_ws['B5'].value
-        consolidated_ws[f"FH{row}"].value = general_ws['D4'].value
-        consolidated_ws[f"FI{row}"].value = general_ws['D5'].value
-        consolidated_ws[f"FJ{row}"].value = general_ws['E4'].value
-        consolidated_ws[f"FK{row}"].value = general_ws['E5'].value
-        consolidated_ws[f"FL{row}"].value = general_ws['F4'].value
-        consolidated_ws[f"FM{row}"].value = general_ws['F5'].value
-        consolidated_ws[f"FN{row}"].value = general_ws['G4'].value
-        consolidated_ws[f"FO{row}"].value = general_ws['G5'].value
-        consolidated_ws[f"FP{row}"].value = general_ws['H4'].value
-        consolidated_ws[f"FQ{row}"].value = general_ws['H5'].value
-        consolidated_ws[f"FV{row}"].value = general_ws['I4'].value
-        consolidated_ws[f"FW{row}"].value = general_ws['I5'].value
-        consolidated_ws[f"FX{row}"].value = general_ws['J4'].value
-        consolidated_ws[f"FY{row}"].value = general_ws['J5'].value
-        consolidated_ws[f"FZ{row}"].value = general_ws['K4'].value
-        consolidated_ws[f"GA{row}"].value = general_ws['K5'].value
-        consolidated_ws[f"GB{row}"].value = version
-    if version == 2:
-        consolidated_ws[f"FB{row}"].value = asset_ID
-        consolidated_ws[f"FC{row}"].value = counter
-        consolidated_ws[f"FD{row}"].value = file_name
-        consolidated_ws[f"FE{row}"].value = last_modified_date
-        consolidated_ws[f"FF{row}"].value = general_ws['B4'].value
-        consolidated_ws[f"FG{row}"].value = general_ws['B5'].value
-        consolidated_ws[f"FH{row}"].value = general_ws['D4'].value
-        consolidated_ws[f"FI{row}"].value = general_ws['D5'].value
-        consolidated_ws[f"FJ{row}"].value = general_ws['E4'].value
-        consolidated_ws[f"FK{row}"].value = general_ws['E5'].value
-        consolidated_ws[f"FL{row}"].value = general_ws['F4'].value
-        consolidated_ws[f"FM{row}"].value = general_ws['F5'].value
-        consolidated_ws[f"FN{row}"].value = general_ws['G4'].value
-        consolidated_ws[f"FO{row}"].value = general_ws['G5'].value
-        consolidated_ws[f"FP{row}"].value = general_ws['H4'].value
-        consolidated_ws[f"FQ{row}"].value = general_ws['H5'].value
-
-        consolidated_ws[f"FR{row}"].value = general_ws['I4'].value
-        consolidated_ws[f"FS{row}"].value = general_ws['I5'].value
-        consolidated_ws[f"FT{row}"].value = general_ws['J4'].value
-        consolidated_ws[f"FU{row}"].value = general_ws['J5'].value
-
-        consolidated_ws[f"FV{row}"].value = general_ws['K4'].value
-        consolidated_ws[f"FW{row}"].value = general_ws['K5'].value
-        consolidated_ws[f"FX{row}"].value = general_ws['L4'].value
-        consolidated_ws[f"FY{row}"].value = general_ws['L5'].value
-        consolidated_ws[f"FZ{row}"].value = general_ws['M4'].value
-        consolidated_ws[f"GA{row}"].value = general_ws['M5'].value
-        consolidated_ws[f"GB{row}"].value = version
-    
-    
-    consolidated_ws['GM2'].value = int(consolidated_ws['GM2'].value) + 1
-    consolidated_ws['GN2'].value = int(consolidated_ws['GN2'].value) + 1
-    consolidated_wb.save('Wireframe_Consolidated_Data.xlsx')
-    return
-
-
 # a funciton that recieves the current time and date
 def recieve_date_and_time():
     """
@@ -1141,10 +1155,13 @@ def create_duplicate_file(source_file_path, destination_file_path):
 def main_function(path_list):
     """
         Purpose:
+            This function consolidated data from multiple Excel files and creates a new Excel file named 'Wirefram_Consolidated_Data.xlsx' containing the combined data. It also creates a duplicate copy of the consolidated file, appending the current date and time to the file name.
 
         Parameters:
+            path_list (list): A list of file paths of the Excel files from which data needs to be consolidated.
 
         Returns:
+            The function does not return anything explicity. It generates the consolidated data file and a duplicate copy with the current date and time in the file name.
     """
     # create a new excel file for the consolidated data
     if not os.path.exists("Wireframe_Consolidated_Data.xlsx"):
@@ -1155,17 +1172,19 @@ def main_function(path_list):
     create_excel_file(new_excel_file_name)
 
     
-    # we will run through each of the excel files and insert the information into the consolidated file
+    # will run through each of the excel files and insert the information into the consolidated file
     for path in path_list:
+        general_modification(path)
         enclosure_extraction(path)
         power_extraction(path)
         instrumentation_extraction(path)
         plc_extraction(path)
         comms_extraction(path)
-        last_date_modified(path)
+        
 
     create_duplicate_file("Wireframe_Consolidated_Data.xlsx", new_excel_file_name)
         
 
+# calling the functions
 list = return_list_of_paths(folder_path)
 main_function(list)
