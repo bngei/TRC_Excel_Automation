@@ -819,7 +819,6 @@ def plc_extraction(path):
 
             if row_list[1] == 'Other (specify)' and row_list[4] != None:
                 consolidated_ws[f"CG{row}"].value = row_list[4]
-                print(row_list)
 
             parent_row += 1
             row += 1
