@@ -17,7 +17,7 @@ folder_path = "C:\\Users\\BTruong\\OneDrive - TRC\\Documents\\Master File Python
 # --------------------------------------------------------------------------------------------------
 
 
-def return_list_of_paths(folder_path):
+def return_list_of_paths(folder_path:str):
     """
     Purpose:
         Returns a list of paths to all Excel files within the folder and its subfolders.
@@ -255,7 +255,7 @@ def create_excel_file(path:str):
     workbook.save(path)
 
 
-def retrieve_asset_ID(path):
+def retrieve_asset_ID(path:str):
     """
         Purpose:
             Retrieves the asset ID from the specified Excel file
@@ -276,7 +276,7 @@ def retrieve_asset_ID(path):
     return asset_ID
 
 
-def general_modification(path):
+def general_extraction(path:str):
     """
         Purpose: 
             Extracts data from an Excel file in the Enclosure sheet and writes it to a consolidated Excel file.
@@ -387,7 +387,7 @@ def general_modification(path):
     return
     
 
-def enclosure_extraction(path):
+def enclosure_extraction(path:str):
     """
         Purpose: 
             Extracts data from an Excel file in the Enclosure sheet and writes it to a consolidated Excel file.
@@ -508,7 +508,7 @@ def enclosure_extraction(path):
     return 
 
 
-def power_extraction(path):
+def power_extraction(path:str):
     """
         Purpose:
             Extracts data from an Excel file in the Power sheet and writes it to a consolidated Excel file.
@@ -660,7 +660,7 @@ def power_extraction(path):
     return
 
 
-def instrumentation_extraction(path):
+def instrumentation_extraction(path:str):
     """
         Purpose:
             Extracts data from an Excel file in the Instrumentation sheet and writes it to a consolidated Excel file.
@@ -750,7 +750,7 @@ def instrumentation_extraction(path):
     return
 
 
-def plc_extraction(path):
+def plc_extraction(path:str):
     """
         Purpose:
             Extracts data from an Excel file in the PLC sheet and writes it to a consolidated Excel file.
@@ -958,7 +958,7 @@ def plc_extraction(path):
     return 
 
 
-def comms_extraction(path):
+def comms_extraction(path:str):
     """
         Purpose:
             Extracts data from an Excel file in the Comms sheet and writes it to a consolidated Excel file.
@@ -1131,7 +1131,7 @@ def recieve_date_and_time():
     return(str(current_date) + '_' + current_time + '_')
 
 
-def create_duplicate_file(source_file_path, destination_file_path):
+def create_duplicate_file(source_file_path:str, destination_file_path:str):
     """
         Purpose:
             Creates a duplicate of the Excel file from the source path to the destination path.
@@ -1151,7 +1151,7 @@ def create_duplicate_file(source_file_path, destination_file_path):
         print(f"An error occurred: {error}")
 
 
-def main_function(path_list):
+def main_function(path_list:list):
     """
         Purpose:
             This function consolidated data from multiple Excel files and creates a new Excel file named 'Wirefram_Consolidated_Data.xlsx' containing the combined data. It also creates a duplicate copy of the consolidated file, appending the current date and time to the file name.
