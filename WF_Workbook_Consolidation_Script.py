@@ -1173,7 +1173,7 @@ def main_function(path_list:list):
     
     # will run through each of the excel files and insert the information into the consolidated file
     for path in path_list:
-        general_modification(path)
+        general_extraction(path)
         enclosure_extraction(path)
         power_extraction(path)
         instrumentation_extraction(path)
