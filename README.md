@@ -9,14 +9,14 @@ Created a set of functions, each responsible for extracting specific data from d
 - instrumentation_extraction: Focuses on data extraction from the "3.Instrumentation" sheet.
 - plc_extraction: Extracts data specifically from the "4.PLC.RTU" sheet.
 - comms_extraction: Deals with data extraction from the "5.Comms" sheet.
-- retrieve_asset_ID(path): Extracts and returns the asset ID from the specified Excel file path.
+- retrieve_asset_ID: Extracts and returns the asset ID from the specified Excel file path.
 
 
 ### Consolidation and File Management:
-- create_excel_file(path): Generates an empty Excel file at the given path if one does not exist already.
+- create_excel_file: Generates an empty Excel file at the given path if one does not exist already.
 - create_duplicate_file: Creates a duplicate of the consolidated Excel file with a timestamp in the filename.
 - recieve_date_and_time: Generates a timestamp in a specific format.
-- return_list_of_paths(folder_path): Gathers and returns a list of file paths within a designated folder, specifically targeting Excel files.
+- return_list_of_paths: Gathers and returns a list of file paths within a designated folder, specifically targeting Excel files.
 - main_function: The primary function orchestrating the consolidation process.
     - It creates a consolidated Excel file (Wireframe_Consolidated_Data.xlsx) if it doesn't exist.
     - Iterates through a list of file paths, invoking extraction functions to compile data into the consolidated file.
